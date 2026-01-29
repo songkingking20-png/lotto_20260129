@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로또 번호 추천기 (6/45)</title>
+    <meta
+      name="description"
+      content="로또(6/45) 번호를 랜덤으로 추천해주는 심플한 웹사이트"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="container">
+      <header class="header">
+        <div>
+          <h1 class="title">로또 번호 추천기</h1>
+          <p class="subtitle">6/45 랜덤 조합 · 중복 없음 · 자동 정렬</p>
+        </div>
+        <div class="badge" aria-label="Lotto 6/45 badge">6/45</div>
+      </header>
+
+      <main class="grid">
+        <section class="card">
+          <div class="cardHeader">
+            <h2 class="cardTitle">추천 번호</h2>
+            <p class="cardDesc">원하는 개수만큼 한 번에 생성할 수 있어요.</p>
+          </div>
+
+          <div class="controls">
+            <label class="field">
+              <span class="label">세트 수</span>
+              <div class="inputRow">
+                <button class="iconBtn" type="button" data-step="-1" aria-label="세트 수 감소">−</button>
+                <input
+                  id="setCount"
+                  class="input"
+                  type="number"
+                  inputmode="numeric"
+                  min="1"
+                  max="10"
+                  step="1"
+                  value="5"
+                  aria-label="생성할 세트 수"
+                />
+                <button class="iconBtn" type="button" data-step="1" aria-label="세트 수 증가">+</button>
+              </div>
+              <span class="hint">1~10세트</span>
+            </label>
+
+            <label class="field">
+              <span class="label">고정(포함) 번호</span>
+              <input
+                id="includeNums"
+                class="input"
+                type="text"
+                placeholder="예: 3, 11, 27"
+                aria-label="반드시 포함할 번호"
+              />
+              <span class="hint">쉼표/공백으로 구분, 1~45, 최대 6개</span>
+            </label>
+
+            <label class="field">
+              <span class="label">제외 번호</span>
+              <input
+                id="excludeNums"
+                class="input"
+                type="text"
+                placeholder="예: 7 13 41"
+                aria-label="제외할 번호"
+              />
+              <span class="hint">쉼표/공백으로 구분, 1~45</span>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button id="btnGenerate" class="btn primary" type="button">
+              번호 생성
+            </button>
+            <button id="btnCopy" class="btn" type="button">
+              복사
+            </button>
+            <button id="btnClear" class="btn danger" type="button">
+              초기화
+            </button>
+          </div>
+
+          <div class="statusRow" aria-live="polite">
+            <div id="status" class="status">준비됨</div>
+            <div class="meta">
+              <span id="metaText" class="metaText">—</span>
+            </div>
+          </div>
+
+          <div id="results" class="results" aria-label="추천 번호 목록"></div>
+        </section>
+
+        <aside class="card">
+          <div class="cardHeader">
+            <h2 class="cardTitle">히스토리</h2>
+            <p class="cardDesc">최근 생성 결과를 저장해두고 다시 볼 수 있어요.</p>
+          </div>
+
+          <div class="historyActions">
+            <button id="btnSave" class="btn" type="button">현재 결과 저장</button>
+            <button id="btnClearHistory" class="btn danger" type="button">히스토리 비우기</button>
+          </div>
+
+          <div id="history" class="history" aria-label="히스토리 목록"></div>
+
+          <div class="tips">
+            <div class="tipTitle">팁</div>
+            <ul class="tipList">
+              <li><strong>포함/제외</strong> 조건을 넣으면 조합이 달라져요.</li>
+              <li>가능한 조합이 없으면 <strong>오류 메시지</strong>가 떠요.</li>
+              <li>복사하면 <strong>한 줄에 한 세트</strong>로 클립보드에 들어가요.</li>
+            </ul>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="footer">
+        <span>로또는 재미로만! 확률은 언제나 동일합니다.</span>
+      </footer>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./script.js"></script>
+  </body>
+</html>
