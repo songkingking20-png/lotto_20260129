@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>로또 번호 추천기 (6/45)</title>
+    <title>신생아 분유 · 이유식 권장량 가이드 (0~24개월)</title>
     <meta
       name="description"
-      content="로또(6/45) 번호를 랜덤으로 추천해주는 심플한 웹사이트"
+      content="개월수에 따라 분유(또는 우유)와 이유식(고형식) 권장량을 참고용으로 확인할 수 있는 가이드"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -15,75 +15,70 @@
     <div class="container">
       <header class="header">
         <div>
-          <h1 class="title">로또 번호 추천기</h1>
-          <p class="subtitle">6/45 랜덤 조합 · 중복 없음 · 자동 정렬</p>
+          <h1 class="title">신생아 분유 · 이유식 권장량 가이드</h1>
+          <p class="subtitle">개월수(0~24개월) 입력 → 분유/이유식 권장 범위 조회 (참고용)</p>
         </div>
-        <div class="badge" aria-label="Lotto 6/45 badge">6/45</div>
+        <div class="badge" aria-label="0~24 months badge">0~24M</div>
       </header>
 
       <main class="grid">
         <section class="card">
           <div class="cardHeader">
-            <h2 class="cardTitle">추천 번호</h2>
-            <p class="cardDesc">원하는 개수만큼 한 번에 생성할 수 있어요.</p>
+            <h2 class="cardTitle">개월수로 조회</h2>
+            <p class="cardDesc">
+              아기 상태(체중, 수유 방식, 성장곡선, 이유식 준비도)에 따라 달라질 수 있어요.
+              <strong>진료/처방이 아닌 참고용</strong>이며, 궁금하면 소아청소년과와 상의하세요.
+            </p>
           </div>
 
           <div class="controls">
             <label class="field">
-              <span class="label">세트 수</span>
+              <span class="label">개월수</span>
               <div class="inputRow">
-                <button class="iconBtn" type="button" data-step="-1" aria-label="세트 수 감소">−</button>
+                <button class="iconBtn" type="button" data-step="-1" aria-label="개월수 감소">−</button>
                 <input
-                  id="setCount"
+                  id="ageMonths"
                   class="input"
                   type="number"
                   inputmode="numeric"
-                  min="1"
-                  max="10"
+                  min="0"
+                  max="24"
                   step="1"
-                  value="5"
-                  aria-label="생성할 세트 수"
+                  value="6"
+                  aria-label="아기 개월수"
                 />
-                <button class="iconBtn" type="button" data-step="1" aria-label="세트 수 증가">+</button>
+                <button class="iconBtn" type="button" data-step="1" aria-label="개월수 증가">+</button>
               </div>
-              <span class="hint">1~10세트</span>
+              <span class="hint">0~24개월</span>
             </label>
 
             <label class="field">
-              <span class="label">고정(포함) 번호</span>
+              <span class="label">체중(선택)</span>
               <input
-                id="includeNums"
+                id="weightKg"
                 class="input"
-                type="text"
-                placeholder="예: 3, 11, 27"
-                aria-label="반드시 포함할 번호"
+                type="number"
+                inputmode="decimal"
+                min="2"
+                max="20"
+                step="0.1"
+                placeholder="예: 6.8"
+                aria-label="아기 체중(kg)"
               />
-              <span class="hint">쉼표/공백으로 구분, 1~45, 최대 6개</span>
+              <span class="hint">입력 시 체중 기준(ml/kg/일) 추정치도 함께 표시</span>
             </label>
 
             <label class="field">
-              <span class="label">제외 번호</span>
-              <input
-                id="excludeNums"
-                class="input"
-                type="text"
-                placeholder="예: 7 13 41"
-                aria-label="제외할 번호"
-              />
-              <span class="hint">쉼표/공백으로 구분, 1~45</span>
+              <span class="label">수유 메모(선택)</span>
+              <input id="memo" class="input" type="text" placeholder="예: 혼합수유, 야간 1회 등" aria-label="메모" />
+              <span class="hint">복사할 때 함께 포함돼요</span>
             </label>
           </div>
 
           <div class="actions">
-            <button id="btnGenerate" class="btn primary" type="button">
-              번호 생성
-            </button>
-            <button id="btnCopy" class="btn" type="button">
-              복사
-            </button>
-            <button id="btnClear" class="btn danger" type="button">
-              초기화
-            </button>
+            <button id="btnLookup" class="btn primary" type="button">조회</button>
+            <button id="btnCopy" class="btn" type="button">결과 복사</button>
+            <button id="btnClear" class="btn danger" type="button">초기화</button>
           </div>
 
           <div class="statusRow" aria-live="polite">
@@ -93,35 +88,33 @@
             </div>
           </div>
 
-          <div id="results" class="results" aria-label="추천 번호 목록"></div>
+          <div id="results" class="results" aria-label="권장량 결과"></div>
         </section>
 
         <aside class="card">
           <div class="cardHeader">
-            <h2 class="cardTitle">히스토리</h2>
-            <p class="cardDesc">최근 생성 결과를 저장해두고 다시 볼 수 있어요.</p>
+            <h2 class="cardTitle">전체 기준표(참고)</h2>
+            <p class="cardDesc">
+              아래 수치는 <strong>평균적인 범위</strong>를 보기 쉽게 정리한 참고표예요.
+              분유 농도는 제품 설명서를 따르고, 이유식 시작/단계는 아기의 준비도를 우선하세요.
+            </p>
           </div>
 
-          <div class="historyActions">
-            <button id="btnSave" class="btn" type="button">현재 결과 저장</button>
-            <button id="btnClearHistory" class="btn danger" type="button">히스토리 비우기</button>
-          </div>
-
-          <div id="history" class="history" aria-label="히스토리 목록"></div>
+          <div id="tableWrap" class="tableWrap" aria-label="전체 기준표"></div>
 
           <div class="tips">
-            <div class="tipTitle">팁</div>
+            <div class="tipTitle">꼭 확인</div>
             <ul class="tipList">
-              <li><strong>포함/제외</strong> 조건을 넣으면 조합이 달라져요.</li>
-              <li>가능한 조합이 없으면 <strong>오류 메시지</strong>가 떠요.</li>
-              <li>복사하면 <strong>한 줄에 한 세트</strong>로 클립보드에 들어가요.</li>
+              <li>아기가 <strong>잘 먹고/잘 자고/체중 증가</strong>가 적절하면 약간의 오차는 정상일 수 있어요.</li>
+              <li><strong>4~6개월</strong>은 이유식 시작 여부가 갈리는 시기예요(준비도 체크).</li>
+              <li>알레르기, 미숙아, 질환, 성장 부진/과다 등은 <strong>개별 지침</strong>을 따르세요.</li>
             </ul>
           </div>
         </aside>
       </main>
 
       <footer class="footer">
-        <span>로또는 재미로만! 확률은 언제나 동일합니다.</span>
+        <span>이 페이지의 수치는 의료 조언이 아닌 참고 정보입니다.</span>
       </footer>
     </div>
 
